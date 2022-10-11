@@ -1,2 +1,2 @@
 # python_deep_diving
-Python deep diving
+Python deep diving coding practices
