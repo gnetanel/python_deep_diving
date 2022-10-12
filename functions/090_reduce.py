@@ -29,3 +29,9 @@ my_list = [1, 2, 3]
 result = reduce(lambda a,b : a + b, my_list, 100)
 # would be 106
 print(result)
+
+n = 20
+print("calculating factorial of n (n!)")
+result = reduce(lambda a, b: a * b, range(1, n+1))
+print(f"{result=}")
+
