@@ -1,3 +1,6 @@
+import time
+
+
 def multi(n: int):
     def internal(i: int) -> int:
         return n * i
@@ -15,6 +18,27 @@ def shared_closure(n: int):
     return adder, multiplier
 
 
+# doing similar things between closure and class
+def timer_closure():
+    initial_time = time.perf_counter()
+
+    def poll():
+        nonlocal initial_time
+        return initial_time - time.perf_counter()
+
+    return poll
+
+
+class TimerClass:
+    initial_time = 0
+
+    def __init__(self):
+        self.initial_time = time.perf_counter()
+
+    def __call__(self, *args, **kwargs):
+        return self.initial_time - time.perf_counter()
+
+
 if __name__ == '__main__':
     print("== Basic closure == ")
     f1 = multi(10)
@@ -23,10 +47,23 @@ if __name__ == '__main__':
     print(f2(100))
 
     print("== shared free var between closure == ")
-    print("Free var of f1", f1.__code__.co_freevars,)
+    print("Free var of f1", f1.__code__.co_freevars, )
     print("closure of f1", f1.__closure__)
 
     print("Shared free var on two closure")
     f1, f2 = shared_closure(100)
     print("Free var of f1 and f2, ", f1.__code__.co_freevars, f1.__code__.co_freevars)
     print("closure f1 and f2", f1.__closure__, f2.__closure__)
+
+    print("== timer with closure and class == ")
+    print("with closure")
+    f1 = timer_closure()
+    time.sleep(1)
+    time_pass = f1()
+    print("time pass with closure is ", time_pass)
+
+    print("---- with class")
+    timer_class = TimerClass()
+    time.sleep(1)
+    time_pass = timer_class()
+    print("time pass with class is ", time_pass)
