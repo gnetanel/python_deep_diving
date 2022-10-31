@@ -29,6 +29,17 @@ def timer_closure():
     return poll
 
 
+my_global_start_counter = 100
+
+
+def not_closure_counter():
+    def internal_counter(n: int):
+        global my_global_start_counter
+        return my_global_start_counter + n
+
+    return internal_counter
+
+
 class TimerClass:
     initial_time = 0
 
@@ -67,3 +78,16 @@ if __name__ == '__main__':
     time.sleep(1)
     time_pass = timer_class()
     print("time pass with class is ", time_pass)
+
+    print("===========not closure...")
+    f1 = not_closure_counter()
+    print(f1(100))
+    print(f1(100))
+    print("Increasing global from outside...")
+    my_global_start_counter = 1000
+    print("and calling again...")
+    print("as can see no closure or free var, but changing immutable object global in one place affect the none "
+          "closure function")
+    print(f1(100))
+    print("Free var of f1", f1.__code__.co_freevars)
+    print("closure f1 and f2", f1.__closure__)
